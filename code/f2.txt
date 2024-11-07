@@ -1,0 +1,25 @@
+// Variable declaration
+int x;
+int y;
+
+// Assignment
+x = 10;
+y = x + 5;
+
+// Print statements
+print(x);
+print(y);
+
+// If statement with optional else
+if (x > y) {
+    print(x);
+} else {
+    print(y);
+}
+
+// While loop
+while (x < 20) {
+    x = x + 1;
+    print(x);
+}
+

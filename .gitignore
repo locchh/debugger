@@ -1,0 +1,10 @@
+__pycache__
+.ipynb_checkpoints
+.vscode
+
+*.interp
+*.tokens
+
+*.tar
+*.rar
+*.zip

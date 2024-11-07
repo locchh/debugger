@@ -1,0 +1,25 @@
+// Missing semicolon after declaration
+int x
+
+// Missing assignment value
+y = ;
+
+// Invalid expression in if statement
+if (x + ) {
+    print(x);
+}
+
+// Unmatched parentheses in print statement
+print(x;
+
+// Missing closing brace for if statement
+if (x > y) {
+    print(x);
+
+// Invalid operator in expression (only +, -, *, / are allowed)
+x = x % 2;
+
+// Misplaced statement outside of braces in while loop
+while (x < 10) 
+    print(x);
+    x = x + 1;
