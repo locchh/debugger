@@ -12,7 +12,7 @@ class SyntaxErrorListener(ErrorListener):
         self.errors = []
 
     def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):
-        self.errors.append(f"Syntax error at line {line}, column {column}: {msg}")
+        self.errors.append((line, column, msg))  # Store line, column, and message
 
 class CodeEditorDebugger:
     def __init__(self, root):
@@ -22,61 +22,48 @@ class CodeEditorDebugger:
         self.bind_shortcuts()
 
     def create_ui(self):
-        # Create a menu bar
         menu_bar = tk.Menu(self.root)
         self.root.config(menu=menu_bar)
 
-        # Create File menu
         file_menu = tk.Menu(menu_bar, tearoff=0)
         menu_bar.add_cascade(label="File", menu=file_menu)
-
         file_menu.add_command(label="Open", command=self.load_file)
         file_menu.add_command(label="Save", command=self.save_file)
         file_menu.add_command(label="Save As", command=self.save_file_as)
 
-        # Add Debug button directly in the menu bar
         debug_menu = tk.Menu(menu_bar, tearoff=0)
         menu_bar.add_cascade(label="🐞 Debug", menu=debug_menu)
         debug_menu.add_command(label="Run Debug", command=self.run_debug)
 
-        # Line Number Text Area
         self.line_numbers = tk.Text(self.root, width=4, padx=4, takefocus=0, border=0, background="lightgray", state="disabled")
         self.line_numbers.pack(side="left", fill="y")
 
-        # Create a scrollbar for the text area
         self.scrollbar = tk.Scrollbar(self.root)
         self.scrollbar.pack(side="right", fill="y")
 
-        # Editor Area with undo enabled for keyboard shortcuts
         self.text_area = tk.Text(self.root, wrap="none", undo=True, yscrollcommand=self.scrollbar.set)
         self.text_area.pack(fill="both", expand=True, side="right")
-
-        # Attach the scrollbar to the text area
         self.scrollbar.config(command=self.text_area.yview)
-        
+
         self.text_area.bind("<KeyRelease>", self.update_line_numbers)
+        self.text_area.tag_config("syntax_error", foreground="red")  # Configure red for syntax errors
 
     def bind_shortcuts(self):
-        # Bind keyboard shortcuts
         self.root.bind("<Control-z>", lambda event: self.text_area.edit_undo())
         self.root.bind("<Control-y>", lambda event: self.text_area.edit_redo())
         self.root.bind("<Control-x>", lambda event: self.cut_text())
         self.root.bind("<Control-c>", lambda event: self.copy_text())
         self.root.bind("<Control-v>", lambda event: self.paste_text())
-        self.root.bind("<Control-a>", lambda event: self.select_all_text())  # Add Select All shortcut
+        self.root.bind("<Control-a>", lambda event: self.select_all_text())
 
     def select_all_text(self):
-        # Select all text in the text_area
         self.text_area.tag_add("sel", "1.0", "end")
-        self.text_area.mark_set("insert", "end")  # Move the cursor to the end
-        self.text_area.see("insert")  # Ensure the cursor is visible
+        self.text_area.mark_set("insert", "end")
+        self.text_area.see("insert")
 
     def update_line_numbers(self, event=None):
-        # Update the line numbers in the line_numbers widget
         self.line_numbers.config(state="normal")
         self.line_numbers.delete(1.0, tk.END)
-        
-        # Insert line numbers
         lines = self.text_area.index(tk.END).split('.')[0]
         line_numbers_string = "\n".join(str(i) for i in range(1, int(lines)))
         self.line_numbers.insert("1.0", line_numbers_string)
@@ -115,24 +102,24 @@ class CodeEditorDebugger:
         token_stream = CommonTokenStream(lexer)
         parser = MyLanguageParser(token_stream)
 
-        # Adding custom error listener
         error_listener = SyntaxErrorListener()
         parser.removeErrorListeners()
         parser.addErrorListener(error_listener)
 
-        # Parse and check for syntax errors
         try:
-            tree = parser.program()  # Assuming 'program' is the start rule
-            if error_listener.errors:
-                messagebox.showerror("Syntax Error", "\n".join(error_listener.errors))
-                return
+            tree = parser.program()
             
-            # Debugging: Step through parsed tokens (for a basic demo)
-            for token in token_stream.tokens:
-                print(f"Token: {token.text}, Line: {token.line}")
-                # Add breakpoints and step-by-step execution logic here
-
-            messagebox.showinfo("Debug", "Debugging completed successfully!")
+            # Clear previous syntax error highlights
+            self.text_area.tag_remove("syntax_error", "1.0", "end")
+            
+            if error_listener.errors:
+                for (line, column, msg) in error_listener.errors:
+                    start_index = f"{line}.{column}"
+                    end_index = f"{line}.{column + 1}"
+                    self.text_area.tag_add("syntax_error", start_index, end_index)
+                messagebox.showerror("Syntax Error", "\n".join([f"Line {line}, Column {column}: {msg}" for line, column, msg in error_listener.errors]))
+            else:
+                messagebox.showinfo("Debug", "No syntax errors found.")
         
         except Exception as e:
             messagebox.showerror("Error", f"Error during parsing: {str(e)}")
