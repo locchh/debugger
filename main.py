@@ -46,7 +46,8 @@ class CodeEditorDebugger:
         self.scrollbar.config(command=self.text_area.yview)
 
         self.text_area.bind("<KeyRelease>", self.update_line_numbers)
-        self.text_area.tag_config("syntax_error", foreground="red")  # Configure red for syntax errors
+        self.text_area.tag_config("syntax_error", foreground="red", background="yellow")  # Configure red background for errors
+        self.text_area.tag_config("correct_syntax", foreground="green")  # Configure green for correct lines
 
     def bind_shortcuts(self):
         self.root.bind("<Control-z>", lambda event: self.text_area.edit_undo())
@@ -108,19 +109,30 @@ class CodeEditorDebugger:
 
         try:
             tree = parser.program()
-            
-            # Clear previous syntax error highlights
+
+            # Clear previous highlights
             self.text_area.tag_remove("syntax_error", "1.0", "end")
-            
+            self.text_area.tag_remove("correct_syntax", "1.0", "end")
+
+            lines = code.splitlines()
+
+            # Highlight lines with errors in red and correct lines in green
             if error_listener.errors:
                 for (line, column, msg) in error_listener.errors:
-                    start_index = f"{line}.{column}"
-                    end_index = f"{line}.{column + 1}"
+                    start_index = f"{line}.0"
+                    end_index = f"{line}.end"
+                    # Highlight the whole line in red if there's an error
                     self.text_area.tag_add("syntax_error", start_index, end_index)
                 messagebox.showerror("Syntax Error", "\n".join([f"Line {line}, Column {column}: {msg}" for line, column, msg in error_listener.errors]))
             else:
+                # Highlight all lines in green if there are no errors
+                for line_number in range(1, len(lines) + 1):
+                    start_index = f"{line_number}.0"
+                    end_index = f"{line_number}.end"
+                    self.text_area.tag_add("correct_syntax", start_index, end_index)
+
                 messagebox.showinfo("Debug", "No syntax errors found.")
-        
+
         except Exception as e:
             messagebox.showerror("Error", f"Error during parsing: {str(e)}")
 
