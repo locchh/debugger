@@ -1,0 +1,22 @@
+int x;
+int y;
+
+x = 10;
+y = 20
+
+if (x < y) {
+    print(x + y);
+} else {
+    print(x - y);
+}
+
+while (x > 0 {
+    x = x - 1;
+    print(x);
+}
+
+int z
+z = x + y + 10;
+
+print(z);
+print(y / x;

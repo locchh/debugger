@@ -3,8 +3,8 @@ from tkinter import filedialog, messagebox
 from antlr4 import InputStream, CommonTokenStream
 from antlr4.error.ErrorListener import ErrorListener
 
-from MyLanguageLexer import MyLanguageLexer
-from MyLanguageParser import MyLanguageParser
+from parser.MyLanguageLexer import MyLanguageLexer
+from parser.MyLanguageParser import MyLanguageParser
 
 class SyntaxErrorListener(ErrorListener):
     def __init__(self):

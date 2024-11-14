@@ -1,0 +1,23 @@
+int a;
+int b;
+
+a = 5;
+b = 15;
+
+if (a < b) {
+    print(a);
+    if (b > 10) {
+        print(b);
+    else {
+        print(a + b);
+    }
+
+while (a < 10) {
+    print(a);
+    a = a + 1;
+}
+
+int result;
+result = a ^ b; // Unsupported operator ^
+
+print(result);

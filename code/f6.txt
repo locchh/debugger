@@ -1,0 +1,26 @@
+int counter;
+int sum;
+
+counter = 0;
+sum = 0;
+
+if (counter = 5) {  // Assignment instead of comparison
+    print("Counter is 5");
+} else {
+    print("Counter is not 5");
+}
+
+while (counter < 10) {
+    sum = sum + counter;
+    counter = counter + 1;
+}
+
+int average;
+average = sum / counter
+
+print("Average:", average);
+
+int invalidVar;
+invalidVar == 10;  // Invalid use of == in assignment
+
+print(invalidVar);
