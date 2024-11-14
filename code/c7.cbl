@@ -1,0 +1,12 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. InvalidJapaneseExample.
+
+       ENVIRONMENT DIVISION.
+
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 GREETING        PIC X(20) VALUE "こんにちは、世界!".
+
+       PROCEDURE DIVISION.
+       DISPLAY GREETING.
+       STOP RUN.

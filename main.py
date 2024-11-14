@@ -123,7 +123,12 @@ class CodeEditorDebugger:
         parser.addErrorListener(error_listener)
 
         try:
-            tree = parser.program()
+
+            if language == "MyLanguage":
+                tree = parser.program()
+            elif language == "Cobol85":
+                tree = parser.startRule()
+            
 
             # Clear previous highlights
             self.text_area.tag_remove("syntax_error", "1.0", "end")
