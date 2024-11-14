@@ -2,6 +2,11 @@
 
 A simple code editor with integrated debugging functionality. The application supports syntax highlighting, file management, and real-time line number display. It also features debugging capabilities using ANTLR, where users can load, parse, and debug code with custom error handling.
 
+<p align="center">
+  <img src="assets/img.png" alt="UI" />
+</p>
+
+
 ## Features
 
 - **Syntax Highlighting & Error Handling**: Using ANTLR, the editor can parse custom language files, displaying syntax errors with line and column information.

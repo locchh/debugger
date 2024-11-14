@@ -38,12 +38,11 @@ class CodeEditorDebugger:
         menu_bar.add_cascade(label="🐞 Debug", menu=debug_menu)
         debug_menu.add_command(label="Run Debug", command=self.run_debug)
 
-        # Language selection UI
-        language_menu = tk.Frame(self.root)
-        language_menu.pack(side="top", fill="x")
-        tk.Label(language_menu, text="Select Language:").pack(side="left")
-        tk.Radiobutton(language_menu, text="MyLanguage", variable=self.language_choice, value="MyLanguage").pack(side="left")
-        tk.Radiobutton(language_menu, text="COBOL 85", variable=self.language_choice, value="Cobol85").pack(side="left")
+        # Language selection in menu bar
+        language_menu = tk.Menu(menu_bar, tearoff=0)
+        menu_bar.add_cascade(label="Language", menu=language_menu)
+        language_menu.add_radiobutton(label="MyLanguage", variable=self.language_choice, value="MyLanguage")
+        language_menu.add_radiobutton(label="COBOL 85", variable=self.language_choice, value="Cobol85")
 
         self.line_numbers = tk.Text(self.root, width=4, padx=4, takefocus=0, border=0, background="lightgray", state="disabled")
         self.line_numbers.pack(side="left", fill="y")

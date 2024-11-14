@@ -13,3 +13,4 @@
        ACCEPT USER-NAME.
        DISPLAY "こんにちは, " USER-NAME "さん！".
        STOP RUN.
+
