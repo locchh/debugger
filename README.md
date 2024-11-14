@@ -46,7 +46,12 @@ A simple code editor with integrated debugging functionality. The application su
    pip install antlr4-python3-runtime
    ```
 2. Ensure you have your custom grammar files for the lexer and parser (e.g., `MyLanguageLexer.py` and `MyLanguageParser.py`).
-3. Run the script and enjoy editing and debugging your code!
+3. Generate Lexer, Parser, Listener, and Visitor with ANTLR:
+   ```
+   antlr4 -Dlanguage=Python3 JavaLexer.g4
+   antlr4 -Dlanguage=Python3 JavaParser.g4
+   ```
+4. Run the script and enjoy editing and debugging your code!
 
 ## Contributing
 
