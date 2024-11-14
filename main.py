@@ -5,6 +5,8 @@ from antlr4.error.ErrorListener import ErrorListener
 
 from parser.MyLanguageLexer import MyLanguageLexer
 from parser.MyLanguageParser import MyLanguageParser
+from parser.Cobol85Lexer import Cobol85Lexer  # Assuming you have a Cobol85Lexer
+from parser.Cobol85Parser import Cobol85Parser  # Assuming you have a Cobol85Parser
 
 class SyntaxErrorListener(ErrorListener):
     def __init__(self):
@@ -18,6 +20,7 @@ class CodeEditorDebugger:
     def __init__(self, root):
         self.root = root
         self.filename = None
+        self.language_choice = tk.StringVar(value="MyLanguage")  # Default language
         self.create_ui()
         self.bind_shortcuts()
 
@@ -34,6 +37,13 @@ class CodeEditorDebugger:
         debug_menu = tk.Menu(menu_bar, tearoff=0)
         menu_bar.add_cascade(label="🐞 Debug", menu=debug_menu)
         debug_menu.add_command(label="Run Debug", command=self.run_debug)
+
+        # Language selection UI
+        language_menu = tk.Frame(self.root)
+        language_menu.pack(side="top", fill="x")
+        tk.Label(language_menu, text="Select Language:").pack(side="left")
+        tk.Radiobutton(language_menu, text="MyLanguage", variable=self.language_choice, value="MyLanguage").pack(side="left")
+        tk.Radiobutton(language_menu, text="COBOL 85", variable=self.language_choice, value="Cobol85").pack(side="left")
 
         self.line_numbers = tk.Text(self.root, width=4, padx=4, takefocus=0, border=0, background="lightgray", state="disabled")
         self.line_numbers.pack(side="left", fill="y")
@@ -99,9 +109,14 @@ class CodeEditorDebugger:
         code = self.text_area.get("1.0", tk.END)
         input_stream = InputStream(code)
         
-        lexer = MyLanguageLexer(input_stream)
-        token_stream = CommonTokenStream(lexer)
-        parser = MyLanguageParser(token_stream)
+        # Choose lexer and parser based on selected language
+        language = self.language_choice.get()
+        if language == "MyLanguage":
+            lexer = MyLanguageLexer(input_stream)
+            parser = MyLanguageParser(CommonTokenStream(lexer))
+        elif language == "Cobol85":
+            lexer = Cobol85Lexer(input_stream)
+            parser = Cobol85Parser(CommonTokenStream(lexer))
 
         error_listener = SyntaxErrorListener()
         parser.removeErrorListeners()
