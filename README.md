@@ -1,6 +1,6 @@
 # Code Editor with Debugger
 
-A simple code editor with integrated debugging functionality. The application supports syntax highlighting, file management, and real-time line number display. It also features debugging capabilities using ANTLR, where users can load, parse, and debug code with custom error handling.
+A versatile toolkit for debugging syntax errors, generating grammars
 
 <p align="center">
   <img src="assets/img.png" alt="UI" />
